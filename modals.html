@@ -1,0 +1,912 @@
+<?php 
+//include 'phphelperfunctions.php';
+include 'databasetables.php'; 
+
+$newregistration = isset($_GET['newregistration']) || false;
+
+?>
+<!-- anonymous login modal -->
+<div class="modal fade" id="anonymousloginmodal">
+  <div class="modal-dialog">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Anonymous Login</h4>
+      </div>
+      <div class="modal-body">
+        <form action="user.php" method="post" id="anonynousloginform" role="form"  data-toggle="validator">
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input class="form-control" name="phone" aria-describedby="helpId" placeholder="0547468609" data-pattern-error="The input is not a valid ten-digit phone number"
+              pattern="^[0-9]{10}$" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" form="anonynousloginform" class="btn btn-primary">Submit </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- //delete all truckdriver records -->
+<div class="modal fade" id="delete-all-drivers-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete All Drivers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="delete-all-drivers-form">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer w3-margin">
+          <button type="submit" class="btn btn-warning" form="delete-all-drivers-form">Okay
+            <span class="fa fa-warning"></span>
+          </button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- //delete all branches records -->
+<div class="modal fade" id="deleteallbranchesmodal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete All Branches</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="deleteallbranchesform">
+        <div class="modal-body">
+          <p class="text-bold w3-large">Are you sure?</p>
+        </div>
+        <div class="modal-footer w3-margin">
+          <button type="submit" class="btn btn-warning" form="deleteallbranchesform">Okay
+            <span class="fa fa-warning"></span>
+          </button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--Edit Profile Modal -->
+<div class="modal fade" id="editprofile" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="modelTitleId">Edit Profile</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="editprofileForm" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" aria-describedby="helpId" value="<?php echo $name; ?>" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="There are invalid characters in your input" placeholder="Eric Clinton" value="<?php echo $phone; ?>"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="Phone">Phone</label>
+            <input type="text" name="phone" class="form-control" aria-describedby="helpId" placeholder="0547468604" value="<?php echo $phone; ?>"
+              pattern="^[0-9]{10}$" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="editprofileForm">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="userlogin">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Client Login</h4>
+      </div>
+      <div class="modal-body">
+        <form data-toggle="validator" method="post" id="userform" enctype="multipart/form-data" class="login-form" role="form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-android-person">
+              </span>
+              <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+                data-minlength="4" data-minlength-error="The input must have at least four characters" data-required-error="Please fill out this field"
+                required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minumum 4 alphanumeric characters.</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-key">
+              </span>
+              <input class="form-control" type="password" name="password" required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <a href="" data-toggle="modal" data-target="#userregistrationmodal" onclick=";(function (event) {
+                    event.preventDefault()
+                    $('#userlogin').modal('hide');
+                  })(event)"> Register now!</a>
+          </div>
+          <?php if(!$anonymous){ ?>
+          <div class="form-group">
+            <a href="javascript:void" data-target="#anonymousloginmodal" data-toggle="modal" onclick=";(function (e) {
+              $('.modal').modal('hide')
+            })(event)">I don't want to register now</a>
+          </div>
+
+          <?php } ?>
+          <input type="hidden" name="who" value="user">
+          <input type="hidden" name="loggedin" value="true">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="userform">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- tow company login modal -->
+<div class="modal fade" id="companyloginmodal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="login-form" action="index.php" method="post" id="companyloginform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-android-person">
+              </span>
+              <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+                data-minlength="4" data-minlength-error="The input must have at least four characters" required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum 4 alphanumeric characters</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-locked">
+              </span>
+              <input class="form-control" type="password" name="password" required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <a href="" data-toggle="modal" data-target="#companyregistration" onclick=";(function (event) {
+              event.preventDefault()
+              $('#companyloginmodal').modal('hide');
+            })(event)">Or Register now!</a>
+          </div>
+          <input type="hidden" name="who" value="company">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="companyloginform">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Password Modal -->
+<div class="modal fade" id="newpassword" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop='static'
+  data-keyboard='false'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="modelTitleId">Create a New Password</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="newPasswordForm" enctype="multipart/form-data" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" name="password" id="nppassword" aria-describedby="helpId" data-minlength="6" data-minlength-error="The input must have at least six characters"
+              <span class="glyphicon form-control-feedback" aria-hidden="true">
+            </span>
+            <div class="help-block with-errors">Minimum of six characters</div>
+          </div>
+          <div class="form-group">
+            <label for="repassword">Confirm Password</label>
+            <input type="text" class="form-control" name="repassword" id="repassword" aria-describedby="helpId" data-match="#nppassword"
+              data-match-error="The passwords must match." required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="username" value="<?php echo $username;?>">
+          <input type="hidden" name="who" value="<?php echo $who;?>">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="newPasswordForm">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- add branch Modal -->
+<div class="modal fade" id="addbranchmodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="modelTitleId">Add a New Branch</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="addbranchform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" aria-describedby="helpId" placeholder="Sunyani West Branch" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="region">Region</label>
+            <select class="form-control text-capitalize" name="region" required>
+              <?php
+              //  $stmt=$db->query('SELECT * from region order by longname asc');
+              // $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+              foreach ($regions as $key => $row) {
+                $idregion = $row['idregion'];
+                $longname=$row['longname'];
+                echo "<option value='$idregion'>$longname</option>";
+               }
+               ?>
+            </select>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="district">District</label>
+            <select class="form-control" name="district" required>
+            </select>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="idcompany" value="<?php echo $idcompany; ?>">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="addbranchform">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit branch Modal -->
+<div class="modal fade" id="editbranchmodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Branch</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="editbranchform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" aria-describedby="helpId" placeholder="Sunyani West Branch" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="region">Region</label>
+            <select class="form-control" name="region">
+              <?php
+                   $stmt=$db->query('SELECT * from region order by longname asc');
+                  $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                  foreach ($rows as $key => $row) {
+                    $longname=$row['longname'];
+                    $idregion=$row['idregion'];
+                    echo "<option value='$idregion' >$longname</option>";
+                   }
+                   ?>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="district">District</label>
+            <select class="form-control" name="district">
+              <option value=""></option>
+            </select>
+          </div>
+          <input type="hidden" id="target-row" value="" name="idbranch">
+          <input type="hidden" name="idcompany" value="<?php echo $idcompany; ?>">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="editbranchform">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Add driver Modal -->
+<div class="modal fade" id="adddrivermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">New Driver</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="adddriverform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control " name="name" aria-describedby="" placeholder="Hayford Adzorlolo" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input has invalid characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" class="form-control " name="phone" aria-describedby="" placeholder="0245558900" pattern="^[0-9]{10}$" data-pattern-error="The input is not a valid ten-digit phone number"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+              data-minlength="4" data-minlength-error="The input must have at least four characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum 4 alphanumeric characters</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control " id="adpassword" name="password" data-minlength="6" data-minlength-error="The input must have at least six characters"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum of six characters</div>
+          </div>
+          <div class="form-group">
+            <label for="">Confirm Password</label>
+            <input type="password" class="form-control " data-match="#adpassword" data-match-error="The passwords must match" name="repassword"
+              aria-describedby="" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Branch</label>
+            <select class="form-control" name="idbranch" required>
+              <?php 
+             $stmt=$db->query("SELECT b.name branch, b.idbranch idbranch, c.username companyusername from branch b left join company c on b.idcompany=c.idcompany where companyusername='$username'");
+              $row = $stmt->fetchAll();
+              foreach($row as $key=>$value){ 
+                $branch = $value['branch'];
+                $idbranch = $value['idbranch'];
+                echo "<option value='$idbranch'>$branch</option>";
+               } ?>
+            </select>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="adddriverform">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- user feedback Modal -->
+<div class="modal fade" id="userfeedbackmodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Client Feedback Form</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="userfeedbackform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="">Your Name</label>
+            <input type="text" class="form-control text-capitalize" name="name" aria-describedby="helpId" placeholder="Shadrack Gyan" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input has invalid characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Your Phone Number</label>
+            <input type="tel" class="form-control" name="phone" id="phone" aria-describedby="helpId" placeholder="0245123456" pattern="^[0-9]{10}$"
+              data-pattern-error="The input is not a valid ten-digit phone number">
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Your Vehicle Number</label>
+            <input type="text" class="form-control text-uppercase" name="vehicleno" aria-describedby="helpId" placeholder="BA 2567-12" pattern="^[A-Za-z0-9- ]+$"
+              data-pattern-error="There may be invalid characters in this input." required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Driver's Name</label>
+            <input type="text" class="form-control text-capitalize" name="driver" aria-describedby="helpId" placeholder="Hayford Adzorlolo" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input has invalid characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="feedback">Feedback</label>
+            <textarea class="form-control" name="feedback" rows="3" required></textarea>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="userfeedbackform">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- user registration modal -->
+
+<div class="modal fade" id="userregistrationmodal" style="overflow-y: scroll">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Client Registration</h4>
+      </div>
+      <div class="modal-body">
+
+        <form action="" data-toggle="validator" method="POST" id="userregistrationform" role="form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="">
+              <span class="ion ion-person"></span> Full Name</label>
+            <input type="text" class="form-control" placeholder="Appiah-Kubi Eric Clinton" pattern="^[A-Za-z]+[A-Za-z -]*$" name="fullname"
+              data-pattern-error="Please input valid characters." data-minlength="7" data-minlength-error="Input must be at least seven characters"
+              data-required-error="Please fill out this field" required>
+            <span class="fa form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="phone">
+              <span class="glyphicon glyphicon-phone"></span> Phone Number
+            </label>
+            <input type="text" class="form-control" required name="phone" placeholder="0547468609" pattern="^[0-9]{10}$" data-pattern-error="You must enter a ten-digit number!">
+            <span class="fa form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="username">
+              <span class="ion ion-social-freebsd-devil"></span> Username
+            </label>
+            <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+              data-minlength="4" data-minlength-error="The input must have at least four characters" data-required-error="Please fill out this field"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum 4 alphanumeric characters</div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="password">
+              <span class="ion ion-unlocked"></span> Password
+            </label>
+            <input type="password" class="form-control" required name="password" id="uregpassword" data-minlength="6" data-minlength-error="The input must have at least six characters">
+            <span class="fa form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum of six characters</div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="repassword">
+              <span class="ion ion-unlocked"></span> Confirm Password
+            </label>
+            <input type="password" class="form-control" required name="repassword" data-match="#uregpassword" data-match-error="The passwords must match">
+            <span class="fa form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="who" value="user">
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="userregistrationform">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- truck driver login -->
+<div class="modal fade" id="truckdriverloginmodal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title h4">Driver Login
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <form class="login-form" action="" method="post" id="truckdriverloginform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-android-person">
+              </span>
+              <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+                data-minlength="4" data-minlength-error="The input must have at least four characters" required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum of four characters</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-locked">
+              </span>
+              <input type="password" class="form-control" required name="password" form="truckdriverloginform">
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="who" value="truckdriver">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="truckdriverloginform">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- company registration -->
+<div class="modal fade" id="companyregistration" style="overflow-y: scroll">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Company Registration</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="" action="" method="post" id="companyregistrationform" role="form" data-toggle="validator">
+          <div class="form-group">
+            <label for="fullname" class="control-label">Company Name</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-android-person">
+              </span>
+              <input class="form-control" type="text" pattern="^[A-Za-z]+[A-Za-z -]*$" data-pattern-error="The input may contain invalid characters"
+                required name="fullname" data-minlength="3" data-minlength-error="The input must have at least three characters"
+                placeholder="Company Name">
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum three characters</div>
+          </div>
+          <div class="form-group">
+            <label for="">Phone</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-iphone">
+              </span>
+              <input type="text" class="form-control" required name="phone" placeholder="0547468609" pattern="^[0-9]{10}$" data-pattern-error="You must enter a ten-digit number!">
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="username" class="control-label">Username</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-android-person">
+              </span>
+              <input class="form-control" type="text" name="username" pattern="[A-Za-z0-9]+" data-pattern-error="The input must have only alphanumeric characters."
+                data-minlength="4" data-minlength-error="The input must have at least four characters" required>
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum 4 alphanumeric characters</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-locked">
+              </span>
+              <input type="password" class="form-control" required name="password" id="cregpassword" data-minlength="6" data-minlength-error="The input must have at least six characters">
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors">Minimum of six characters</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Confirm Password</label>
+            <div class="input-group ">
+              <span class="input-group-addon ion ion-locked">
+              </span>
+              <input type="password" class="form-control" required name="repassword" data-match="#cregpassword" data-match-error="The passwords must match">
+            </div>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="who" value="company">
+          <input type="hidden" id="company_target_url" value="company.php">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="companyregistrationform">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- driver feedback modal -->
+<div class="modal fade" id="driverfeedbackmodal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Feedback</h4>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="POST" data-toggle="validator" role="form" id="driverfeedbackform">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" class="form-control text-capitalize" name='name' placeholder="First Name Other Names" value='<?php echo $name; ?>' pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input may contain invalid characters" data-minlength="6" data-minlength-error="The input must have at least six characters"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="driversname">Client's Name</label>
+            <input type="text" name="clientname" class="form-control text-capitalize" placeholder="First Name Other Names" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input may contain invalid characters" data-minlength="6" data-minlength-error="The input must have at least six characters"
+              required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Client Phone Number</label>
+            <input type="tel" class="form-control" name="phone" aria-describedby="helpId" placeholder="0245123456" pattern="^[0-9]{10}$"
+              data-pattern-error="The input is not a valid ten-digit phone number">
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Client Vehicle Number</label>
+            <input type="text" class="form-control text-uppercase" name="vehicleno" aria-describedby="helpId" placeholder="BA 2567-12" pattern="^[A-Za-z0-9- ]+$"
+              data-pattern-error="There may be invalid characters in this input." required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="feedback">Feedback</label>
+            <textarea class="form-control" name="feedback" rows="3" data-minlength-error="The input must have at least six characters"
+              required></textarea>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="driverfeedbackform">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- send request sms modal -->
+<div class="modal fade" id="sendrequestsmsmodal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Send Tow Request Via SMS</h4>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="post" id="sendrequestsmsform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="">Full Name</label>
+            <input type="text" class="form-control text-capitalize" name="name" aria-describedby="helpId" placeholder="Shadrack Gyan" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input has invalid characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" class="form-control" name="phone" aria-describedby="helpId" placeholder="0245123456" pattern="^[0-9]{10}$"
+              data-pattern-error="The input is not a valid ten-digit phone number">
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Vehicle Number</label>
+            <input type="text" class="form-control text-uppercase" name="vehicleno" aria-describedby="helpId" placeholder="BA 2567-12" pattern="^[A-Za-z0-9- ]+$"
+              data-pattern-error="There may be invalid characters in this input." required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Vehicle Type</label>
+            <select name="cartype" class="form-control" required>
+              <option value="salon">Salon Car</option>
+              <option value="4x4">4X4</option>
+              <option value="pickup">Pickup</option>
+              <option value="minivan">Mini Van</option>
+            </select>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="feedback">Description of Problem</label>
+            <textarea class="form-control" name="problem" rows="3" required></textarea>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="companyname" class="companyname">
+          <input type="hidden" name="companyusername" class="companyusername">
+          <input type="hidden" name="companyphone" class="companyphone">
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="sendrequestsmsform">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- send request to dashboard modal -->
+<div class="modal fade" id="sendtowrequestmodal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Send Tow Request</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" id="sendtowrequestform" data-toggle="validator" role="form">
+          <div class="form-group">
+            <label for="">Full Name</label>
+            <input type="text" class="form-control text-capitalize" name="name" aria-describedby="helpId" placeholder="Shadrack Gyan" pattern="^[A-Za-z]+[A-Za-z -]*$"
+              data-pattern-error="The input has invalid characters" required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" class="form-control" name="phone" aria-describedby="helpId" placeholder="0245123456" pattern="^[0-9]{10}$"
+              data-pattern-error="The input is not a valid ten-digit phone number">
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Vehicle Number</label>
+            <input type="text" class="form-control text-uppercase" name="vehicleno" aria-describedby="helpId" placeholder="BA 2567-12" pattern="^[A-Za-z0-9- ]+$"
+              data-pattern-error="There may be invalid characters in this input." required>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Vehicle Type</label>
+            <select name="cartype" class="form-control" required>
+              <option value="salon">Salon Car</option>
+              <option value="4x4">4X4</option>
+              <option value="pickup">Pickup</option>
+              <option value="minivan">Mini Van</option>
+            </select>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="feedback">Description of Problem</label>
+            <textarea class="form-control" name="problem" rows="3" required></textarea>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+          <input type="hidden" name="companyname" class="companyname">
+          <input type="hidden" name="companyusername" class="companyusername">
+          <input type="hidden" name="companyphone" class="companyphone">
+          <input type="hidden" name="idcompany" class="idcompany">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="sendtowrequestform">Send </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="notificationhistorymodal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Notification History</h4>
+      </div>
+      <div class="modal-body">
+        
+        <div class="list-group">
+          
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modals.html script-->
+<script src="assets/js/validator.js"></script>
+<script src="assets/datatable.net/js/datatables.js"></script>
+<!-- <script src="assets/datatable.net/js/dataTables.editor.js"></script> -->
+<script src="assets/js/moment.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.js"></script>
+<script src="assets/js/jquery.scrollTo.js"></script>
+<script src="assets/js/jquery.localScroll.js"></script>
+<script src="assets/js/dataTables.scroller.js"></script>
+<script src="assets/js/jquery.timer.js"></script>
+<script src="assets/js/strtotime.js"></script>
+<script src="assets/js/bootstrap-hover-dropdown.js"></script>
+<script src="assets/js/ConnectionStatus.js"></script>
+<script src="assets/js/list.js"></script>
+<script src="assets/js/rater.js"></script>

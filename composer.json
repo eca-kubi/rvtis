@@ -1,0 +1,15 @@
+{
+  "name": "pubnub/pubnub",
+  "type": "library",
+  "description": "The Only Global Network For Real-Time Data -- PubNub!",
+  "keywords": ["api", "real-time", "realtime", "real time", "ajax", "push"],
+  "homepage": "http://www.pubnub.com/",
+  "license": "MIT",
+  "version": "4.0.0",
+  "authors": [
+    {
+      "name": "PubNub",
+      "email": "support@pubnub.com"
+    }
+  ]
+}

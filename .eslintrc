@@ -1,0 +1,14 @@
+{
+    "extends": ["airbnb-base"],
+    "plugins": [
+      "exclude-php-tags"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 7,
+      "sourceType": "module",
+      "ecmaFeatures": {
+          "jsx": true
+      }
+  }
+
+}
