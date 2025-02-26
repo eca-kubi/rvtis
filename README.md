@@ -39,8 +39,6 @@ The Real-Time Vehicle Towing Information System (RVTIS) is designed to facilitat
    ```
 
 2. **Set Up the Database**:
-   - Import the SQL file located in the `database` directory into your MySQL server.
-   - Update the database configuration in `config.php` with your MySQL credentials.
 
 3. **Install Dependencies**
 
