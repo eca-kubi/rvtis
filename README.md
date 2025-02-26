@@ -28,7 +28,7 @@ The Real-Time Vehicle Towing Information System (RVTIS) is designed to facilitat
 ## Installation
 ### Prerequisites
 - **PHP**: Ensure you have PHP installed on your server.
--MySQL ****: A MySQL database server is required.
+- **MySQL**: A MySQL database server is required.
 - **Web Browser**: Any modern web browser (Chrome, Firefox, Safari, etc.).
 - **GPS-enabled Device**: For location-based services.
 
